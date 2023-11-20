@@ -1,9 +1,10 @@
+import bcrypt from "bcrypt";
 import { Router } from "express";
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
 import { User } from "../models/User";
 import { UserDocument } from "../interfaces";
 import { Ticket } from "../models/Ticket";
+
 export const router = Router();
 
 router.get("/ping", (req: Request, res: Response) => {
@@ -21,8 +22,14 @@ router.get("/users", async (req: Request, res: Response) => {
 });
 
 router.post("/create-user", async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
   const saltRounds = 10;
+
+  if (password !== confirmPassword) {
+    res.status(400).json({
+      message: "Passwords don't match",
+    });
+  }
 
   try {
     let userExists = await User.findOne({ email });
@@ -71,12 +78,12 @@ router.post("/login", async (req: Request, res: Response) => {
       });
     } else {
       return res.status(400).json({
-        error: "Wrong password",
+        message: "Wrong password",
       });
     }
   } catch (err) {
     return res.status(400).json({
-      error: err,
+      message: err,
     });
   }
 });

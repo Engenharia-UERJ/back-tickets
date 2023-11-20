@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import { Schema } from "mongoose";
 
-export const ticketSchema = new mongoose.Schema({
+export const ticketSchema = new Schema({
   // Informações do passageiro
   passengerName: {
     type: String,
@@ -40,7 +40,7 @@ export const ticketSchema = new mongoose.Schema({
     enum: ["credit card", "debit card", "cash"],
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
