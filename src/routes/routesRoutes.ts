@@ -57,17 +57,18 @@ router.post("/create-route", async (req: Request, res: Response) => {
 
 router.put("/update-route/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { origem, destino, horaPartida, dataPartida, passagens } = req.body;
+  const { origin, destination, departureTime, departureDate, tickets } =
+    req.body;
 
   try {
     const route = await Route.findByIdAndUpdate(
       id,
       {
-        origem,
-        destino,
-        horaPartida,
-        dataPartida,
-        passagens,
+        origin,
+        destination,
+        departureTime,
+        departureDate,
+        tickets,
       },
       { new: true }
     );
@@ -101,11 +102,19 @@ router.delete("/delete-route/:id", async (req: Request, res: Response) => {
 });
 
 router.get("/routes", async (req: Request, res: Response) => {
-  const routes = await Route.find();
+  try {
+    const routes = await Route.find();
 
-  res.status(200).json({
-    routes,
-  });
+    res.status(200).json({
+      message: "Rotas encontradas com sucesso",
+      routes,
+    });
+  } catch (err) {
+    console.log("Erro ao encontrar rotas", err);
+    res.status(400).json({
+      error: err,
+    });
+  }
 });
 
 export default router;
