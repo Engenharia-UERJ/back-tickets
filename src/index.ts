@@ -1,9 +1,12 @@
 import express from "express";
-import { router } from "./routes";
 import cors from "cors";
-
 import dotenv from "dotenv";
 import { mongooseConnect } from "./database/connection";
+
+// importação das rotas
+import authRoutes from "./routes/authRoutes";
+import ticketRoutes from "./routes/ticketRoutes";
+import routeRoutes from "./routes/routesRoutes";
 
 dotenv.config();
 
@@ -13,7 +16,10 @@ mongooseConnect();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(router);
+
+app.use("/auth", authRoutes);
+app.use("/routes", routeRoutes);
+app.use("/ticketRoutes", ticketRoutes);
 
 let port = process.env.PORT;
 
