@@ -23,25 +23,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Route = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const userSchema = new mongoose_1.Schema({
-    name: {
+const routeSchema = new mongoose_1.Schema({
+    origin: {
         type: String,
-        required: [true, "Name is required"],
+        required: [true, "Origin city is required"],
     },
-    email: {
+    destination: {
         type: String,
-        required: [true, "Email is required"],
+        required: [true, "Destination city is required"],
     },
-    password: {
+    departureTime: {
         type: String,
-        required: [true, "Password is required"],
+        required: [true, "Departure time is required"],
     },
-    role: {
-        type: String,
-        enum: ["admin", "user"],
-        default: "user",
+    departureDate: {
+        type: Date,
+        default: Date.now,
+        required: [true, "Departure date is required"],
     },
+    tickets: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Ticket",
+        },
+    ],
 });
-exports.User = mongoose_1.default.model("User", userSchema);
+exports.Route = mongoose_1.default.model("Route", routeSchema);
